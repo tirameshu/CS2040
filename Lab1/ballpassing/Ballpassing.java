@@ -27,7 +27,7 @@ public class Ballpassing {
             } else if (event.equals("JOIN")) {
                 String newStudent = sc.next();
                 index++;
-                if (index <= students.size()) {
+                if (index < students.size()) {
                     students.add(index, newStudent);
                 } else {
                     students.add(newStudent);
