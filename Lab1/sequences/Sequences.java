@@ -9,11 +9,11 @@ import java.util.*;
 public class Sequences {
 	private void run() {
 		Scanner sc = new Scanner(System.in);
-        long n = sc.nextInt();
+        long n = sc.nextLong();
         int prog = sc.nextInt();
-        long a = sc.nextInt();
+        long a = sc.nextLong();
         if (prog == 1) {
-            long d = sc.nextInt();
+            long d = sc.nextLong();
             long val = a;
             for (int i = 0; i < n - 1; i++) {
                 System.out.print(val + " ");
@@ -21,7 +21,7 @@ public class Sequences {
             }
             System.out.println(val);
         } else {
-            long r = sc.nextInt();
+            long r = sc.nextLong();
             long val = a;
             for (int i = 0; i < n - 1; i++) {
                 System.out.print(val + " ");
