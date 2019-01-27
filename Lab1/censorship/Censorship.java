@@ -11,6 +11,7 @@ public class Censorship {
 		Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
         List<String> arr = new ArrayList<>();
+        List<String> result = new ArrayList<>();
 
         for (int i = 0; i < n; i++) {
             arr.add(sc.next().toLowerCase());
@@ -19,14 +20,20 @@ public class Censorship {
         while (sc.hasNext()) {
             String word = sc.next();
             if (arr.contains(word.toLowerCase())) {
+                String string = "";
                 for (int i = 0; i < word.length(); i++) {
-                    System.out.print("*");
+                    string += "*";
                 }
-                System.out.print(" ");
+                result.add(string);
             } else {
-                System.out.print(word + " ");
+                result.add(word);
             }
         }
+        
+        for (int i = 0; i < result.size() - 1; i++) {
+            System.out.print(result.get(i) + " ");
+        }
+        System.out.print(result.get(result.size() - 1));
 	}
 
 	public static void main(String[] args) {
