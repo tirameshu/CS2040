@@ -33,7 +33,7 @@ public class Censorship {
         for (int i = 0; i < result.size() - 1; i++) {
             System.out.print(result.get(i) + " ");
         }
-        System.out.print(result.get(result.size() - 1));
+        System.out.println(result.get(result.size() - 1));
 	}
 
 	public static void main(String[] args) {
