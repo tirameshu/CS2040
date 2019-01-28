@@ -42,10 +42,10 @@ class TutorialGroupImpl implements TutorialGroup {
 
     public String toString() {
         String result = "[";
-        for (int i = 0; i < students.size(); i++) {
+        for (int i = 0; i < students.size() - 1; i++) {
             result += (i + 1) + ":" + students.get(i) + ", ";
         }
-        result += "]";
+        result += students.size() + ":" + students.get(students.size() - 1) + "]";
         return result;
     }
 }
