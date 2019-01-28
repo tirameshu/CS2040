@@ -6,6 +6,7 @@ class TutorialGroupImpl implements TutorialGroup {
     private List<String> students;
 
     public TutorialGroupImpl(String groupNum) {
+        this.groupNum = groupNum;
         students = new ArrayList<String>();
     }
 
