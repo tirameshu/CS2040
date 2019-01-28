@@ -34,11 +34,9 @@ class TutorialGroupImpl implements TutorialGroup {
     }
 
     public void shrinkClassSize(int newSize) {
-        if (newSize < students.size()) {
-            int orig = students.size();
-            for (int i = orig; i > newSize; i--) {
+        int orig = students.size();
+        for (int i = orig; i > newSize; i--) {
                 students.remove(i - 1);
-            }
         }
     }
 
