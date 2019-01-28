@@ -1,4 +1,4 @@
-import java.util.List;
+import java.util.List; 
 import java.util.ArrayList;
 
 class TutorialGroupImpl implements TutorialGroup {
@@ -6,6 +6,7 @@ class TutorialGroupImpl implements TutorialGroup {
     private List<String> students;
 
     public TutorialGroupImpl(String groupNum) {
+        this.groupNum = groupNum;
         students = new ArrayList<String>();
     }
 
