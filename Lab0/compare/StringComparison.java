@@ -1,52 +1,35 @@
-import java.util.List; 
-import java.util.ArrayList;
+/**
+ *
+ * author	: [Wang Xinman]
+ * matric no: [A0180257E]
+ * 
+ */
 
-class TutorialGroupImpl implements TutorialGroup {
-    private String groupNum;
-    private List<String> students;
+import java.util.*;
 
-    public TutorialGroupImpl(String groupNum) {
-        this.groupNum = groupNum;
-        students = new ArrayList<String>();
-    }
+public class StringComparison {
+	
+	public static void main(String[] args) {
 
-    public String getGroupNum() {
-        return groupNum;
-    }
+		// declare the necessary variables
+        String string1;
+        String string2;
 
-    public String getStudentAt(int sNo) {
-        return students.get(sNo - 1);
-        // remember to take edge case into account, when sNo > 0, sNo <= stu.size()
-    }
 
-    public void addStudent(String student) {
-        students.add(student);
-    }
+		// declare a Scanner object to read input
+        Scanner sc = new Scanner(System.in);
 
-    public void setStudentAt(int sNo, String newStudent) {
-        if (sNo <= students.size()) {
-            students.set(sNo - 1, newStudent);
+		// read input and process them accordingly
+        string1 = sc.next().toLowerCase();
+        string2 = sc.next().toLowerCase();
+
+        if (string1.compareTo(string2) < 0) {
+            System.out.println("1");
+        } else if (string1.compareTo(string2) > 0) {
+            System.out.println("2");
         } else {
-            for (int i = 0; i < sNo - students.size() - 1; i++) {
-                students.add("");
-            }
-            students.add(newStudent);
+            System.out.println("0");
         }
-    }
 
-    public void shrinkClassSize(int newSize) {
-        int orig = students.size();
-        for (int i = orig; i > newSize; i--) {
-                students.remove(i - 1);
-        }
-    }
-
-    public String toString() {
-        String result = "[";
-        for (int i = 0; i < students.size(); i++) {
-            result += (i + 1) + ":" + students.get(i) + ", ";
-        }
-        result += "]";
-        return result;
-    }
+	}
 }
