@@ -16,6 +16,7 @@ class TutorialGroupImpl implements TutorialGroup {
 
     public String getStudentAt(int sNo) {
         return students.get(sNo - 1);
+        // remember to take edge case into account, when sNo > 0, sNo <= stu.size()
     }
 
     public void addStudent(String student) {
