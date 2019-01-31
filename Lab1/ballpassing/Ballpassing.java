@@ -8,22 +8,26 @@ import java.util.*;
 
 public class Ballpassing {
 	private void run() {
-        List<String> students = new ArrayList<>();
+        List<String> students = new LinkedList<>();
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
 
-        for (int i = 0; i < n; i++) {
+        String lastToCall = sc.next();
+        for (int i = 0; i < n - 1; i++) {
             students.add(sc.next());
         }
+        students.add(lastToCall);
 
         long q = sc.nextLong();
         int index = 0;
+        Iterator<String> it = students.iterator();
 
-        for (int j = 0; j < q; j++) {
+        for (long j = 0; j < q; j++) {
             String event = sc.next();
 
             if (event.equals("NEXT")) {
                 index++;
+                System.out.println(it.next());
             } else if (event.equals("JOIN")) {
                 String newStudent = sc.next();
                 index++;
@@ -32,12 +36,16 @@ public class Ballpassing {
                 } else {
                     students.add(newStudent);
                 }
+                System.out.println(newStudent);
             } else {
                 students.remove(index);
+                System.out.println(it.next());
             }
 
             index = index % students.size();
-            System.out.println(students.get(index));
+            if (j >= students.size()) {
+                it = students.iterator();
+            }
         }
 	}
 
