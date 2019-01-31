@@ -20,20 +20,23 @@ public class Ballpassing {
 
         long q = sc.nextLong();
         int index = 0;
-        ListIterator<String> it = students.iterator();
+        ListIterator<String> it = students.listIterator();
 
         for (long j = 0; j < q; j++) {
             String event = sc.next();
+            String currentStudent;
 
             if (event.equals("NEXT")) {
                 //index++;
-                System.out.println(it.next());
+                currentStudent = it.next();
+                System.out.println(currentStudent);
 
             } else if (event.equals("JOIN")) {
                 String newStudent = sc.next();
                 index++;
+                currentStudent = newStudent;
                 it.add(newStudent); //inserting newStudent to be called by next()
-                System.out.println(it.previous(); //calling the newStudent
+                System.out.println(it.previous()); //calling the newStudent
                 /*
                 if (index < students.size()) {
                     students.add(index, newStudent);
@@ -46,7 +49,8 @@ public class Ballpassing {
                 it.next();
                 it.remove(); //apparently removes the last e called by next()
                 //students.remove(index);
-                System.out.println(it.next());
+                currentStudent = it.next();
+                System.out.println(currentStudent);
             }
 
             //index = index % students.size();
