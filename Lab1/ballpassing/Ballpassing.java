@@ -26,26 +26,33 @@ public class Ballpassing {
             String event = sc.next();
 
             if (event.equals("NEXT")) {
-                index++;
-                System.out.println(it.next());
+                System.out.println("next");
+                //index++;
+                //System.out.println(it.next());
+
             } else if (event.equals("JOIN")) {
+                System.out.println("join");
                 String newStudent = sc.next();
                 index++;
+                /*
                 if (index < students.size()) {
                     students.add(index, newStudent);
                 } else {
                     students.add(newStudent);
                 }
-                System.out.println(newStudent);
+                */
+                //System.out.println(newStudent);
             } else {
-                students.remove(index);
-                System.out.println(it.next());
+                System.out.println("leave");
+                //students.remove(index);
+                //System.out.println(it.next());
             }
 
-            index = index % students.size();
-            if (j >= students.size()) {
-                it = students.iterator();
-            }
+            String currentStudent = it.next();
+            System.out.println(currentStudent);
+            //index = index % students.size();
+            it.remove(currentStudent);
+            it.add(currentStudent);
         }
 	}
 
