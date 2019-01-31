@@ -55,7 +55,18 @@ public class Ballpassing {
 
             //index = index % students.size();
             it.remove();
+            if (currentStudent == null) {
+                //set current to null for those that get it by calling .next()
+                //so as to check for it.next here
+                //if !hasNext(), means at first one, so reassign, then System.out.println(it.next());
+                //else: System.out.println(current)
             it.add(currentStudent); //"adds to end"
+            System.out.println(it.hasNext());
+            if (!it.hasNext()) {
+                System.out.println("hi");
+                it = new LinkedList<String>().listIterator();
+                it = students.listIterator();
+            }
         }
 	}
 
