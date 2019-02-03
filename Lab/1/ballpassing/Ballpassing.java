@@ -12,11 +12,9 @@ public class Ballpassing {
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
 
-        String lastToCall = sc.next();
-        for (int i = 0; i < n - 1; i++) {
+        for (int i = 0; i < n; i++) {
             students.add(sc.next());
         }
-        students.add(lastToCall);
 
         long q = sc.nextLong();
         int index = 0;
@@ -31,12 +29,10 @@ public class Ballpassing {
 
             if (event.equals("NEXT")) {
                 index++;
-                currentStudent = it.next();
             } else if (event.equals("JOIN")) {
                 index++;
                 it.add(sc.next()); //inserting newStudent to be called by next()
                 it.previous(); //calls the just added e
-                currentStudent = it.next();
                 //need call next to move cursor back
                 /*
                 if (index < students.size()) {
@@ -47,16 +43,14 @@ public class Ballpassing {
                 */
                 //System.out.println(newStudent);
             } else {
-                System.out.println("previous: " + it.previous());
-                System.out.println("next: " + it.next());
-                it.remove(); //apparently removes the last e called by next()
-                //students.remove(index);
+                it.previous();
                 currentStudent = it.next();
+                it.remove(); //apparently removes the last e called by next()
+                System.out.println("removed: " + students);
+                //students.remove(index);
             }
 
             index = index % students.size();
-            System.out.println("index: " + index);
-            System.out.println(currentStudent);
             //it.remove();
             //if (currentStudent == null) {
                 //set current to null for those that get it by calling .next()
@@ -64,10 +58,12 @@ public class Ballpassing {
                 //if !hasNext(), means at first one, so reassign, then System.out.println(it.next());
                 //else: System.out.println(current)
             //it.add(currentStudent); //"adds to end"
-            if (currentStudent == students.get(students.size() - 1)) {
+            if (currentStudent == students.get(students.size() - 1) || !students.contains(currentStudent)) {
                 it = students.listIterator();
                 System.out.println("new it");
             }
+            currentStudent = it.next();
+            System.out.println(currentStudent);
         }
 	}
 
