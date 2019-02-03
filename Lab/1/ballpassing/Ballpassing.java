@@ -21,11 +21,9 @@ public class Ballpassing {
         String currentStudent;
         ListIterator<String> it = students.listIterator();
         currentStudent = it.next();
-        System.out.println(currentStudent);
 
         for (long j = 0; j < q; j++) {
             String event = sc.next();
-            System.out.println(students);
 
             if (event.equals("NEXT")) {
                 index++;
@@ -46,11 +44,10 @@ public class Ballpassing {
                 it.previous();
                 currentStudent = it.next();
                 it.remove(); //apparently removes the last e called by next()
-                System.out.println("removed: " + students);
                 //students.remove(index);
             }
 
-            index = index % students.size();
+            //index = index % students.size();
             //it.remove();
             //if (currentStudent == null) {
                 //set current to null for those that get it by calling .next()
@@ -58,10 +55,10 @@ public class Ballpassing {
                 //if !hasNext(), means at first one, so reassign, then System.out.println(it.next());
                 //else: System.out.println(current)
             //it.add(currentStudent); //"adds to end"
-            if (currentStudent == students.get(students.size() - 1) || !students.contains(currentStudent)) {
+            if (index > students.size() - 1 || currentStudent == students.get(students.size() - 1)) {
                 it = students.listIterator();
-                System.out.println("new it");
             }
+            index = index % students.size();
             currentStudent = it.next();
             System.out.println(currentStudent);
         }
