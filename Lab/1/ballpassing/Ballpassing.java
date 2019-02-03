@@ -20,23 +20,24 @@ public class Ballpassing {
 
         long q = sc.nextLong();
         int index = 0;
+        String currentStudent;
         ListIterator<String> it = students.listIterator();
+        currentStudent = it.next();
+        System.out.println(currentStudent);
 
         for (long j = 0; j < q; j++) {
             String event = sc.next();
-            String currentStudent;
+            System.out.println(students);
 
             if (event.equals("NEXT")) {
-                //index++;
-                currentStudent = it.next();
-                System.out.println(currentStudent);
-
-            } else if (event.equals("JOIN")) {
-                String newStudent = sc.next();
                 index++;
-                currentStudent = newStudent;
-                it.add(newStudent); //inserting newStudent to be called by next()
-                System.out.println(it.previous()); //calling the newStudent
+                currentStudent = it.next();
+            } else if (event.equals("JOIN")) {
+                index++;
+                it.add(sc.next()); //inserting newStudent to be called by next()
+                it.previous(); //calls the just added e
+                currentStudent = it.next();
+                //need call next to move cursor back
                 /*
                 if (index < students.size()) {
                     students.add(index, newStudent);
@@ -46,26 +47,26 @@ public class Ballpassing {
                 */
                 //System.out.println(newStudent);
             } else {
-                it.next();
+                System.out.println("previous: " + it.previous());
+                System.out.println("next: " + it.next());
                 it.remove(); //apparently removes the last e called by next()
                 //students.remove(index);
                 currentStudent = it.next();
-                System.out.println(currentStudent);
             }
 
-            //index = index % students.size();
-            it.remove();
-            if (currentStudent == null) {
+            index = index % students.size();
+            System.out.println("index: " + index);
+            System.out.println(currentStudent);
+            //it.remove();
+            //if (currentStudent == null) {
                 //set current to null for those that get it by calling .next()
                 //so as to check for it.next here
                 //if !hasNext(), means at first one, so reassign, then System.out.println(it.next());
                 //else: System.out.println(current)
-            it.add(currentStudent); //"adds to end"
-            System.out.println(it.hasNext());
-            if (!it.hasNext()) {
-                System.out.println("hi");
-                it = new LinkedList<String>().listIterator();
+            //it.add(currentStudent); //"adds to end"
+            if (currentStudent == students.get(students.size() - 1)) {
                 it = students.listIterator();
+                System.out.println("new it");
             }
         }
 	}
