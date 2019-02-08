@@ -7,7 +7,8 @@ class BasicLinkedList<E> implements LinkedListInterface<E> {
         BasicLinkedList<Integer> combined = new BasicLinkedList<>();
         node1 = firstList.getFirst();
         node2 = secondList.getFirst();
-        ListNode<E> smaller;
+        ListNode<Integer> curr;
+        ListNode<Integer> smaller;
 
         if (node1.getElement(); < node2.getElement()) {
             combined.head = node1;
@@ -24,7 +25,9 @@ class BasicLinkedList<E> implements LinkedListInterface<E> {
                 smaller = node1;
             }
 
-            combined.add(smaller);
+            curr.next = smaller;
+            curr = curr.getNext();
+
             if (smaller == node1) {
                 node1 = node1.getNext();
                 firstList.logicalRemove(smaller);
@@ -34,16 +37,21 @@ class BasicLinkedList<E> implements LinkedListInterface<E> {
             }
         }
 
+        BasicLinkedList<Integer> list;
+
         if (!firstList.isEmpty()) {
-            for (Integer i: firstList) {
-                combined.addFirst(i);
-            }
-        } else if (!secondList.isEmpty()) {
-            for (Integer i: secondList) {
-                combined.addFirst(i);
-            }
+            list = firstList;
+        } else {
+            list = secondList;
+        }
+        
+        curr.next = list.getFirst();
+        while (curr.getNext() != null) {
+            curr = curr.next;
+            list.logicalRemove(curr);
         }
     }
+    
     public void logicalRemove(ListNode<E> target) {
         //ignoring his "no reference to other nodes except by calling getNext()"
         ListNode<E> node = this.head;
