@@ -13,6 +13,7 @@ public class CircularLinkedList<E> {
     }
 
     public void swap(int index) {
+        //assumes can directly get element
         int position = index % _size;
         ListNode<E> toSwap = _head;
         for (int i = 1; i < position; i++) {
@@ -20,4 +21,9 @@ public class CircularLinkedList<E> {
             toSwap = toSwap.getNext();
         }
         //at position to swap
+        E toSwapValue = toSwap.getElement();
+        toSwap.setElement(toSwap.getNext().getElement());
+        toSwap.getNext().setElement(toSwapValue);
+    }
+}
 
