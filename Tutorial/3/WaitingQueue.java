@@ -8,11 +8,13 @@ public class WaitingQueue {
     private static final int ARR_LENGTH = 10;
     
     public WaitingQueue() {
-        waitingHere = new String(ARR_LENGTH);
+        waitingHere = new String[ARR_LENGTH];
     }
 
-    public void addAPerson(String name) {
-        if ((back + 1) % ARR_LENGTH == front) { //there is always a gap between back and front
+    public boolean addAPerson(String name) {
+        if ((back + 1) % ARR_LENGTH == front) {
+            //if back and front coincide, the list is empty
+            //so if back is right before front, the list is full 
             return false;
         } else {
             waitingHere[back] = name;
@@ -29,9 +31,9 @@ public class WaitingQueue {
     }
     
     public boolean leave(String name) {
-        int pos;
+        int pos = ARR_LENGTH;
         //loop through array to find the person who left
-        if (pos != null) {
+        if (pos < ARR_LENGTH) {
             waitingHere[pos] = null;
             while (waitingHere[pos] == null && pos != back) {
                 waitingHere[pos] = waitingHere[pos+1];
