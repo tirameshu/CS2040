@@ -12,27 +12,47 @@ public class WaitingQueue {
     }
 
     public void addAPerson(String name) {
-        if (back == ARR_LENGTH) {
+        if ((back + 1) % ARR_LENGTH == front) { //there is always a gap between back and front
+            return false;
+        } else {
+            waitingHere[back] = name;
+            return true;
+        }
 
     }
 
     public String serveNextPerson() {
-        String person = waitingHere.get(0);
-        waitingHere.remove(person);
+        String person = waitingHere[front];
+        waitingHere[front] = null;
+        front = (front + 1) % ARR_LENGTH;
         return person;
     }
     
     public boolean leave(String name) {
-        if (waitingHere.contains(name)) {
-            waitingHere.remove(name);
+        int pos;
+        //loop through array to find the person who left
+        if (pos != null) {
+            waitingHere[pos] = null;
+            while (waitingHere[pos] == null && pos != back) {
+                waitingHere[pos] = waitingHere[pos+1];
+                pos = (pos + 1) % ARR_LENGTH;
+                waitingHere[pos] = null;
+            }
+
+            if (back > 0) {
+                back = (back - 1) % ARR_LENGTH;
+            } else {
+                back = ARR_LENGTH;
+            }
             return true;
+
         } else {
             return false;
         }
     }
 
     public boolean isEmpty() {
-        return waitingHere[0] == null;
+        return front == back;
     }
 
     public static void main(String[] args) {
