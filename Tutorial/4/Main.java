@@ -1,3 +1,5 @@
+import java.util.*;
+
 class Main {
     public int sum(int n) {
         if (n == 1) {
@@ -40,9 +42,55 @@ class Main {
             paintBucketFill(matrix, row, col, colour, original_colour);
         }
     }
+    
+    public int sum(Stack<Integer> s) {
+        return s.pop() + sum(s);
+    }
+
+    public void insert(Stack<Integer> s, Integer val) {
+        if (s.empty()) {
+            s.push(val);
+            return;
+        }
+        Integer top = s.peek();
+        if (val >= top) {
+            s.push(val);
+        } else {
+            int temp = s.pop();
+            insert(s, val);
+            s.push(temp);
+        }
+    }
+
+    public void delete(Stack<Integer> s, Integer val) {
+        int top = s.pop();
+        if (top != val) {
+            delete(s, val);
+            s.push(top);
+        }
+    }
+    
+    public void sort(Stack<Integer> s) {
+        if (!s.empty()) {
+            int top = s.pop();
+            sort(s);
+            insert(s, top);
+        }
+    }
 
     public static void main(String[] args) {
         Main main = new Main();
+        Stack<Integer> s = new Stack<>();
+        s.push(5);
+        s.push(2);
+        s.push(1);
+        s.push(4);
+        main.sort(s);
+ 
+        while (!s.empty()) {
+            System.out.println(s.pop());
+        }
+        /*
         int[][] colourMatrix = {
             {1, 1, 1, 1, 2, 2, 2, 1},
             {1, 1, 1, 0, 0, 0, 0, 2},
@@ -59,5 +107,6 @@ class Main {
         main.paintBucketFill(colourMatrix, 2, 3, 2);
         System.out.println("After fill...");
         main.printMatrix(colourMatrix);
+        */
     }
 }
