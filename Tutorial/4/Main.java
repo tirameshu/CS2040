@@ -66,10 +66,12 @@ class Main {
     }
 
     public void delete(Stack<Integer> s, Integer val) {
-        int top = s.pop();
-        if (top != val) {
-            delete(s, val);
-            s.push(top);
+        if (!s.empty()) {
+            int top = s.pop();
+            if (top != val) {
+                delete(s, val);
+                s.push(top);
+            }
         }
     }
     
