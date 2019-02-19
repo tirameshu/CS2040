@@ -43,7 +43,10 @@ class Main {
         }
     }
     
-    public int sum(Stack<Integer> s) {
+    public int sum(Stack<Integer> s) {//base case!!!
+        if (s.empty()){
+            return 0;
+        }
         return s.pop() + sum(s);
     }
 
