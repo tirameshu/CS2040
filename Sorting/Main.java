@@ -16,5 +16,13 @@ class Main {
         MergeSort ms = new MergeSort(arr);
         ms.sort();
         System.out.println("MergeSort: " + ms.toString());
+
+        QuickSort qs = new QuickSort(arr);
+        qs.sort();
+        System.out.println("QuickSort: " + qs.toString());
+
+        RadixSort rs = new RadixSort(arr);
+        rs.sort();
+        System.out.println("RadixSort: " + rs.toString());
     }
 }
