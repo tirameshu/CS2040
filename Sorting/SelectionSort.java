@@ -1,32 +1,34 @@
-import java.util.Arrays;
+// Selection Sort algorithm
+public class SelectionSort {
 
-class SelectionSort {
-    private int[] arr;
+	public static void selectionSort(int[] a) {
+		for (int i = a.length - 1; i >= 1; i--) {
+			int index = i; // i is the last item position and
+			               // index is the largest element position
+			// loop to get the largest element
+			for (int j = 0; j < i; j++) {
+				if (a[j] > a[index]) 
+					index = j; // j is the current largest item
+			}
+			// Swap the largest item a[index] with the last item a[i]
+			int temp = a[index];
+			a[index] = a[i];
+			a[i] = temp;
+		}
+	}
 
-    public SelectionSort(int[] arr) {
-        this.arr = arr;
-    }
+	public static void printArray(int[] a) {
+		for (int i = 0; i < a.length; i++)
+			System.out.print(a[i] + " ");
+		System.out.println();
+	}
 
-    public void sort() {
-        int largest = this.arr[0];
-        int indexOfLargest = 0;
-        int end = this.arr.length - 1;
-        for (int i = 0; i < this.arr.length - 1; i++) {
-            for (int j = 0; j <= end; j++) {
-                if (this.arr[j] > largest) {
-                    largest = this.arr[j];
-                    indexOfLargest = j;
-                }
-            }
-            //swap largst with last e
-            this.arr[indexOfLargest] = this.arr[end];
-            this.arr[end] = largest;
-            end--;
-            largest = this.arr[0];
-        }
-    }
+	public static void main(String[] args) {
+		int[] arr = { 7, 12, 3, 5, -6, 3, 8, 2, 10, -3 };
 
-    public String toString() {
-        return Arrays.toString(this.arr);
-    }
+		printArray(arr);
+		selectionSort(arr);
+		printArray(arr);
+	}
 }
+

@@ -1,60 +1,54 @@
-import java.util.*;
+// Merge Sort algorithm
+public class MergeSort {
 
-class MergeSort {
-    private int[] arr;
+	public static void mergeSort(int[] a) {
+		mergeSort(a, 0, a.length-1);
+	}
 
-    public MergeSort(int[] arr) {
-        this.arr = arr;
-    }
+	private static void mergeSort(int[] a, int i, int j) {
+		if (i < j) {
+			int mid= (i+j)/2;
+			mergeSort(a, i, mid);
+			mergeSort(a, mid+1, j);
+			merge(a, i, mid, j);
+		}
+	}
 
-    private void sort(int start, int end) {
-        //if there is more than 2 elements, break into left and right and merge
-        //halve the array
-        //left starts at "start", right starts at "mid"
-        if (start < end) {
-            //there is more than 1 item, so can split into two non-empty arr
-            //let merge handle the situation where there is only one item in each arr
-            int mid = (start + end) / 2 + 1;
-            sort(start, mid - 1);
-            sort(mid, end);
-            merge(start, mid, end);
-            //calling sort on the different intervals is just so that the left and right will call merge eventually
-            //even if after splitting, the left and right end up with 1 item, such that sort(...) is invalid, calling merge over the current interval will still merge the two items.
-        }
-    }
+	private static void merge(int[] a, int i, int mid, int j) {
+		// Merges the 2 sorted sub-arrays a[i..mid] and a[mid+1..j] 
+		// into one sorted sub-array a[i..j]
+		int[] temp = new int[j-i+1]; // temp storage
+		int left = i, right = mid+1, it = 0;
+		// it = next index to store merged item in temp[]
 
-    private void merge(int start, int mid, int end) {
-        int[] temp = new int[end - start + 1];
-        int left = start, right = mid, it = 0;
+		while (left<= mid && right<=j) {
+			if (a[left] <= a[right])
+				temp[it++] = a[left++];
+			else
+				temp[it++] = a[right++];
+		}
 
-        while (left < mid && right <= end) {
-            //this decides whether it is in place or not
-            if (this.arr[left] <= this.arr[right]) {
-                temp[it++] = this.arr[left++];
-            } else {
-                temp[it++] = this.arr[right++];
-            }
-        }
+		// Copy the remaining elements into temp.
+		while (left<=mid) temp[it++] = a[left++];
+		while (right<=j)  temp[it++] = a[right++];
 
-        //only one of them will be invoked
-        while (left < mid) {
-            temp[it++] = this.arr[left++];
-        }
+		// Copy the result in temp back into the original array a
+		for (int k = 0; k < temp.length; k++)
+			a[i+k] = temp[k];
+	}
 
-        while (right <= end) {
-            temp[it++] = this.arr[right++];
-        }
+	public static void printArray(int[] a) {
+		for (int i = 0; i < a.length; i++)
+			System.out.print(a[i] + " ");
+		System.out.println();
+	}
 
-        for (int k = 0; k < temp.length; k++) {
-            arr[start + k] = temp[k];
-        }
-    }
+	public static void main(String[] args) {
+		int[] arr = { 7, 12, 3, 5, -6, 3, 8, 2, 10, -3 };
 
-    public String toString() {
-        return Arrays.toString(this.arr);
-    }
-
-    public void sort() {
-        sort(0, arr.length - 1);
-    }
+		printArray(arr);
+		mergeSort(arr);
+		printArray(arr);
+	}
 }
+
