@@ -12,5 +12,9 @@ class Main {
         InsertionSort is = new InsertionSort(arr);
         is.sort();
         System.out.println("InsertionSort: " + is.toString());
+
+        MergeSort ms = new MergeSort(arr);
+        ms.sort();
+        System.out.println("MergeSort: " + ms.toString());
     }
 }
