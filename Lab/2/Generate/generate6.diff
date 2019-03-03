@@ -1,0 +1,62 @@
+122c122,123
+< akr
+---
+> ak
+> ar
+125c126,128
+< hakr
+---
+> ha
+> hak
+> har
+127,131c130,132
+< hkar
+< hkra
+< hrak
+< hrka
+< k
+---
+> hk
+> hr
+> hrk
+136,142c137,144
+< sahkr
+< sahrk
+< sakhr
+< sakrh
+< sarhk
+< sarkh
+< shakr
+---
+> sa
+> sak
+> sar
+> sark
+> sh
+> sha
+> shak
+> shar
+144,159c146,151
+< shkar
+< shkra
+< shrak
+< shrka
+< skahr
+< skarh
+< skhar
+< skhra
+< skrah
+< skrha
+< srahk
+< srakh
+< srhak
+< srhka
+< srkah
+< srkha
+---
+> shk
+> shr
+> shrk
+> sk
+> sr
+> srk
