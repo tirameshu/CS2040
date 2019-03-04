@@ -8,14 +8,16 @@ import java.util.*;
 
 public class Generate {
     private static ArrayList<String> perms = new ArrayList<>();
-    private static SortedSet<String> powerSet = new TreeSet<>();
+    private static List<String> powerSet = new ArrayList<>();
 
     private ArrayList<String> slot(String firstLetter, ArrayList<String> lst) {
         ArrayList<String> newList = new ArrayList<>();
         for (String s: lst) {
+            /*
             if (s.length() > 0) {
-                powerSet.add(s);
+                addTo(powerSet, s);
             }
+            */
             for (int i = 0; i <= s.length(); i++) {
                 String string = new StringBuilder(s).insert(i, firstLetter).toString();
                 if (!newList.contains(string)) {
@@ -34,31 +36,36 @@ public class Generate {
             return lst;
         }
         String firstLetter = String.valueOf(str.charAt(0));
-        powerSet.add(firstLetter);
+        //addTo(powerSet, firstLetter);
         String substring = new StringBuilder(str).substring(1);
         return slot(firstLetter, permutate(substring));
     }
 
-    private void subSeq(String string) {
-        StringBuilder sb;
-        for (int j = 0; j < string.length(); j++) {
-            sb = new StringBuilder(string);
-            String letter = sb.substring(j, j+1).toString();
-            for (int k = j + 1; k < string.length(); k++) {
-                sb = new StringBuilder(letter); //ensures that all possible pairs are made
-                String toAdd = sb.append(string.charAt(k)).toString();
-                powerSet.add(toAdd);
-            }
+    private ArrayList<String> powerset(List<String> lst) {
+        if (lst.size() == 0) {
+            ArrayList<String> l = new ArrayList<>();
+            l.add("");
+            return l;
+        }
+        String head = lst.get(0);
+        List<String> sublist = powerset(lst.subList(1, lst.size()));
+        ArrayList<String> combined = new ArrayList<>(sublist);
+        for (String s: sublist) {
+            combined.add(head+s);
+        }
+        return combined;
+    }
+    
+    /*
+    private void addTo(ArrayList<Set<String>> ss, String str) {
+        TreeSet<Character> set = new TreeSet<>();
+        if (!ss.contains(set)) {
+            System.out.println(set.toString());
+            ss.add(set);
         }
     }
-
-    /*
-    private void addTo(SortedSet<Set<String>> ss, String str) {
-        TreeSet<String> set = new TreeSet<>();
-        set.add(str);
-        ss.add(set);
-    }
     */
+    
 
 	private void run() {
 		//implement your "main" method here
@@ -70,9 +77,25 @@ public class Generate {
         for (String res: perms) {
             System.out.println(res);
         }
-        subSeq(w);
-        powerSet.forEach(System.out::println);
+        
+        ArrayList<String> letters = new ArrayList<>();
+        for (int i = 0; i < w.length(); i++) {
+            letters.add(String.valueOf(w.charAt(i)));
+        }
+
+        powerSet = powerset(letters);
+        powerSet = powerSet.subList(1, powerSet.size());
+        Collections.sort(powerSet);
+        for (String s: powerSet) {
+            System.out.println(s);
+        }
         /*
+        subSeq(w);
+        SortedSet<String> ps = new TreeSet<>();
+        for (Set<String> s: powerSet) {
+            ps.add(s.toString());
+        }
+        ps.forEach(System.out::println);
         subSeq(w);
         Collections.sort(powerSet);
         for (String p: powerSet) {
