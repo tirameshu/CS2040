@@ -15,8 +15,8 @@ public class Boxes {
         Scanner sc = new Scanner(System.in);
         int q = sc.nextInt();
 
-        long r = sc.nextLong();
-        long c = sc.nextLong();
+        int r = sc.nextInt();
+        int c = sc.nextInt();
 
         boolean[][] matrix = new boolean[r][c];
         //by default all false
@@ -24,15 +24,15 @@ public class Boxes {
         for (int i = 0; i < q; i++) {
             String command = sc.next();
             if (command.equals("SIT")) {
-                matrix[sc.nextLong()][sc.nextLong()] = true;
+                matrix[sc.nextInt()][sc.nextInt()] = true;
             } else if (command.equals("BOX")) {
-                if (matrix[sc.nextLong()][sc.nextLong()]) {
+                if (matrix[sc.nextInt()][sc.nextInt()]) {
                     System.out.println("Y");
                 } else {
                     System.out.println("N");
                 }
             } else if (command.equals("ROW")) {
-                boolean[] row = matrix[sc.nextLong()];
+                boolean[] row = matrix[sc.nextInt()];
                 boolean has = false;
                 for (boolean b: row) {
                     if (b) {
@@ -46,11 +46,11 @@ public class Boxes {
                     System.out.println("N");
                 }
             } else if (command.equals("COL")) {
-                long c = sc.nextLong();
+                int col = sc.nextInt();
                 boolean has = false;
-                for (long j = 0; j < r; j++) {
+                for (int j = 0; j < r; j++) {
                     //go through all rows and find the specified col
-                    if (matrix[j][c]) {
+                    if (matrix[j][col]) {
                         has = true;
                         break;
                     }
