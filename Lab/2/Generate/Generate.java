@@ -74,10 +74,12 @@ public class Generate {
         String w = sc.next();
         perms = permutate(w);
         Collections.sort(perms);
+        StringBuilder result = new StringBuilder();
         for (String res: perms) {
-            System.out.println(res);
+            result.append(res + "\n");
         }
         
+        //perhaps use array?
         ArrayList<String> letters = new ArrayList<>();
         for (int i = 0; i < w.length(); i++) {
             letters.add(String.valueOf(w.charAt(i)));
@@ -86,9 +88,12 @@ public class Generate {
         powerSet = powerset(letters);
         powerSet = powerSet.subList(1, powerSet.size());
         Collections.sort(powerSet);
-        for (String s: powerSet) {
-            System.out.println(s);
+        for (String s: powerSet.subList(0, powerSet.size() - 1)) {
+            result.append(s + "\n");
         }
+        result.append(powerSet.get(powerSet.size() - 1));
+        //result = result.delete(result.length()-2, result.length()-1);
+        System.out.println(result.toString());
         /*
         subSeq(w);
         SortedSet<String> ps = new TreeSet<>();
