@@ -37,7 +37,7 @@ public class Generate {
         }
         String firstLetter = String.valueOf(str.charAt(0));
         //addTo(powerSet, firstLetter);
-        String substring = new StringBuilder(str).substring(1);
+        String substring = str.substring(1);
         return slot(firstLetter, permutate(substring));
     }
 
