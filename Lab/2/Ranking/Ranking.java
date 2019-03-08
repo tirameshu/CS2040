@@ -30,6 +30,7 @@ public class Ranking {
         Arrays.sort(sortedScore);
 
         int s = n;
+        //use binary search
         for (int i = 0; i < n; i++) {
             String person = nameList[i];
             while (s >= 0) {
