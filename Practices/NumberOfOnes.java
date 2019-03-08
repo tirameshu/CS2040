@@ -3,6 +3,7 @@ class NumberOfOnes {
         if (n < 2) {
             return n;
         } else {
+            //can just do n%2 + f(n/2)
             if (n % 2 == 0) {
                 return calculate(n/2);
             } else {
