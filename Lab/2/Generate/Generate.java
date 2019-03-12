@@ -10,35 +10,25 @@ public class Generate {
     private static ArrayList<String> perms = new ArrayList<>();
     private static List<String> powerSet = new ArrayList<>();
 
-    private ArrayList<String> slot(String firstLetter, ArrayList<String> lst) {
-        ArrayList<String> newList = new ArrayList<>();
-        for (String s: lst) {
-            /*
-            if (s.length() > 0) {
-                addTo(powerSet, s);
-            }
-            */
-            for (int i = 0; i <= s.length(); i++) {
-                String string = new StringBuilder(s).insert(i, firstLetter).toString();
-                if (!newList.contains(string)) {
-                    newList.add(string);
-                }
+    private void permute(String start, String end) {
+        if (end.length() <= 1) {
+            perms.add(start+end);
+        } else {
+            for (int i = 0; i < end.length(); i++) {
+                String sub = end.substring(0, i) + end.substring(i+1, end.length());
+                String newStart = start + end.substring(i, i+1);
+                permute(newStart, sub);
             }
         }
-        
-        return newList;
     }
 
-    private ArrayList<String> permutate(String str) {
-        if (str.length() == 0) {
-            ArrayList<String> lst = new ArrayList<>();
-            lst.add(str);
-            return lst;
-        }
-        String firstLetter = String.valueOf(str.charAt(0));
-        //addTo(powerSet, firstLetter);
-        String substring = str.substring(1);
-        return slot(firstLetter, permutate(substring));
+    private void permutate(String str) {
+        // permutate takes in two args, a starting and ending string
+        // ending string is what has yet to be permutated
+        // the start string is what is to be appended to the front of the ending string
+        // take out every letter in the endingstring, and add the letter to the front of the permutation of the rest of the letters
+        // until ending letter has only 1 letter, permutation of which is just one letter, so can directly add the starting string to it.
+        permute("", str);
     }
 
     private ArrayList<String> powerset(List<String> lst) {
@@ -56,30 +46,18 @@ public class Generate {
         return combined;
     }
     
-    /*
-    private void addTo(ArrayList<Set<String>> ss, String str) {
-        TreeSet<Character> set = new TreeSet<>();
-        if (!ss.contains(set)) {
-            System.out.println(set.toString());
-            ss.add(set);
-        }
-    }
-    */
-    
-
 	private void run() {
 		//implement your "main" method here
         Scanner sc = new Scanner(System.in);
 
         String w = sc.next();
-        perms = permutate(w);
+        permutate(w);
         Collections.sort(perms);
         StringBuilder result = new StringBuilder();
         for (String res: perms) {
             result.append(res + "\n");
         }
         
-        //perhaps use array?
         ArrayList<String> letters = new ArrayList<>();
         for (int i = 0; i < w.length(); i++) {
             letters.add(String.valueOf(w.charAt(i)));
@@ -92,21 +70,7 @@ public class Generate {
             result.append(s + "\n");
         }
         result.append(powerSet.get(powerSet.size() - 1));
-        //result = result.delete(result.length()-2, result.length()-1);
         System.out.println(result.toString());
-        /*
-        subSeq(w);
-        SortedSet<String> ps = new TreeSet<>();
-        for (Set<String> s: powerSet) {
-            ps.add(s.toString());
-        }
-        ps.forEach(System.out::println);
-        subSeq(w);
-        Collections.sort(powerSet);
-        for (String p: powerSet) {
-            System.out.println(p);
-        }
-        */
 	}
 
 	public static void main(String[] args) {
