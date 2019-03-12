@@ -9,65 +9,69 @@ import java.util.*;
 public class Boxes {
 	private void run() {
 		//implement your "main" method here
-        //Output as scanner loops to take in tokens
-        //Maintain a boolean matrix (2d array)
 
         Scanner sc = new Scanner(System.in);
         int q = sc.nextInt();
 
-        int r = sc.nextInt();
-        int c = sc.nextInt();
+        long r = sc.nextLong();
+        long c = sc.nextLong();
 
-        boolean[][] matrix = new boolean[r][c];
-        //by default all false
+        //sit: hashmap.put(x, y). key is x, val is y coord
+        //box: lookup hashmap to see if coordinates in map, ie if map.containsKey(x) && map.get(x).contains(y)
+        //row: lookup hashmap to see if map.containsKey(x)
+        //col: lookup hashmap to see if map.values().contains(y)
+        
+        HashMap<Long, ArrayList<Long>> map = new HashMap<>();
 
         for (int i = 0; i < q; i++) {
             String command = sc.next();
             if (command.equals("SIT")) {
-                matrix[sc.nextInt()][sc.nextInt()] = true;
+                long x = sc.nextLong();
+                long y = sc.nextLong();
+                if (map.containsKey(x)) {
+                    ArrayList<Long> curr = map.get(x);
+                    curr.add(y);
+                    map.replace(x, curr);
+                } else {
+                    ArrayList<Long> lst = new ArrayList<>();
+                    lst.add(y);
+                    map.put(x, lst);
+                }
             } else if (command.equals("BOX")) {
-                if (matrix[sc.nextInt()][sc.nextInt()]) {
+                long x = sc.nextLong();
+                long y = sc.nextLong();
+                if (map.containsKey(x) && map.get(x).contains(y)){ 
                     System.out.println("Y");
                 } else {
                     System.out.println("N");
                 }
             } else if (command.equals("ROW")) {
-                boolean[] row = matrix[sc.nextInt()];
-                boolean has = false;
-                for (boolean b: row) {
-                    if (b) {
-                        has = true;
-                        break;
-                    }
-                }
-                if (has) {
+                long x = sc.nextLong();
+                if (map.containsKey(x)) {
                     System.out.println("Y");
                 } else {
                     System.out.println("N");
                 }
             } else if (command.equals("COL")) {
-                int col = sc.nextInt();
-                boolean has = false;
-                for (int j = 0; j < r; j++) {
-                    //go through all rows and find the specified col
-                    if (matrix[j][col]) {
-                        has = true;
+                long y = sc.nextLong();
+                Collection<ArrayList<Long>> values = map.values();
+                boolean found = false;
+                for (ArrayList<Long> lst: values) {
+                    if (lst.contains(y)) {
+                        System.out.println("Y");
+                        found = true;
                         break;
                     }
                 }
-                if (has) {
-                    System.out.println("Y");
-                } else {
+                if (!found) {
                     System.out.println("N");
                 }
-            } else {
-                System.out.println("idk");
             }
         }
-	}
+    }
 
-	public static void main(String[] args) {
-		Boxes newBoxes = new Boxes();
-		newBoxes.run();
-	}
+    public static void main(String[] args) {
+        Boxes newBoxes = new Boxes();
+        newBoxes.run();
+    }
 }
