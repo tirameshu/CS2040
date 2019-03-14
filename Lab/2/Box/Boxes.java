@@ -4,6 +4,8 @@
  * PLab Acct.   :
  */
 
+// Notes from lesson: should keep a hashset of cats, a hashmap of (x, count) for row, and hashmap of (y, count) for columns to support operations such as removing a cat
+
 import java.util.*;
 
 public class Boxes {
