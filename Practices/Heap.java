@@ -1,14 +1,15 @@
 class Heap {
-    private int HEAPSIZE = 7;
+    private int HEAPSIZE = 0; //pointer to the end, not actual size of arr
     private int[] arr;
 
+    /*
     public Heap() {
-        this.arr = new int[] {-999, 8, 7, 3, 2, 1, 2, 0};
+        this.arr = new int[] {-999, 8, 7, 3, 2, 1, 2, 0, 0, 0, 0, 0};
     }
+    */
 
     public Heap(int size) {
-        this.HEAPSIZE = size;
-        this.arr = new int[HEAPSIZE+1];
+        this.arr = new int[size*2];
     }
 
     private int left(int parent) {
@@ -27,6 +28,21 @@ class Heap {
         int temp = this.arr[index1];
         this.arr[index1] = this.arr[index2];
         this.arr[index2] = temp;
+    }
+
+    private void bubbleUp(int end) {
+        int val = this.arr[end];
+        while (end > 1 && val > this.arr[parent(end)]) {
+            swap(end, parent(end));
+            end = parent(end);
+            val = this.arr[end];
+        }
+    }
+
+    public void insert(int val) {
+        HEAPSIZE++;
+        this.arr[HEAPSIZE] = val;
+        bubbleUp(HEAPSIZE);
     }
 
     public int extractMax() {
@@ -58,10 +74,33 @@ class Heap {
         }
     }
 
-    public static void main(String[] args) {
-        Heap heap = new Heap();
+    public String toString() {
+        String string = "";
+        for (int i = 1; i <= HEAPSIZE; i++) {
+            string += this.arr[i] + " ";
+        }
+        return string;
+    }
 
-        System.out.println(heap.extractMax());
+    public static void main(String[] args) {
+        Heap heap = new Heap(10);
+
+        heap.insert(3);
+        heap.insert(8);
+
+        heap.insert(2);
+        heap.insert(8);
+
+        heap.insert(5);
+        heap.insert(0);
+
+        heap.insert(2);
+        heap.insert(1);
+
+        heap.insert(3);
+        heap.insert(3);
+
+        System.out.println(heap.toString());
 
     }
 }
