@@ -8,8 +8,17 @@ class Heap {
     }
     */
 
-    public Heap(int size) {
-        this.arr = new int[size*2];
+    public Heap(int[] array) {
+        this.arr = new int[array.length*2];
+        this.HEAPSIZE = array.length;
+
+        for (int i = 1; i <= this.HEAPSIZE; i++) {
+            this.arr[i] = array[i-1];
+        }
+
+        for (int j = parent(this.HEAPSIZE); j > 0; j--) {
+            bubbleDown(j);
+        }
     }
 
     private int left(int parent) {
@@ -83,23 +92,9 @@ class Heap {
     }
 
     public static void main(String[] args) {
-        Heap heap = new Heap(10);
-
-        heap.insert(3);
-        heap.insert(8);
-
-        heap.insert(2);
-        heap.insert(8);
-
-        heap.insert(5);
-        heap.insert(0);
-
-        heap.insert(2);
-        heap.insert(1);
-
-        heap.insert(3);
-        heap.insert(3);
-
+        int[] arr = new int[] {1, 9, 30, 0, 3, 9, 4, 8, 5};
+        Heap heap = new Heap(arr);
+        
         System.out.println(heap.toString());
 
     }
