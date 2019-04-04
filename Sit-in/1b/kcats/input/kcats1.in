@@ -1,0 +1,12 @@
+11
+ADD RartheCat
+ADD PandaCat
+ADD SharkCat
+ADD BellCurveCat
+ADD StudentCat
+REMOVE
+ADD SoCCat
+REMOVE
+REMOVE
+FLIP
+ADD GziptheCat
