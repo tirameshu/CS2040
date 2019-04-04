@@ -1,0 +1,325 @@
+   /**
+               * Name         :
+               * Matric No.   :
+                * PLab Acct.   :
+                      */
+                      import java.math.BigInteger;
+           import java.util.*;
+ class Fraction
+                     {
+ private long numerator;
+           private long denominator;
+                      /**
+                  * Constructor class for Fraction
+       * Pre-condition: Denominator cannot be zero
+                        */
+Fraction(long numerator, long denominator)
+                 {
+     this.numerator = numerator;
+ this.denominator = denominator;
+          if (denominator == 0)
+               {
+                   throw new IllegalArgumentException("Denominator cannot be zero.");
+    }
+      this.simplify();
+                  }
+ /**
+       * Private method to simplify the Fraction
+                   * Pre-condition: Denominator cannot be zero
+  */
+             private void simplify()
+      {
+                   if (denominator == 0)
+       {
+                      throw new IllegalArgumentException("Denominator cannot be zero.");
+                   }
+                 else if (denominator < 0)
+     {
+             numerator = -numerator;
+                 denominator = -denominator;
+         }
+                        if (numerator != 0)
+                       {
+                        long gcd = BigInteger.valueOf(Math.abs(numerator)).gcd(BigInteger.valueOf(denominator)).intValue();
+         if (gcd < 0) gcd = -gcd;
+                       numerator /= gcd;
+   denominator /= gcd;
+         }
+  else
+                {
+               denominator = 1;
+                }
+                 }
+              /**
+    * Converts the Fraction to string so that it can be printed
+        */
+ @Override
+    public String toString()
+            {
+         this.simplify();
+      return this.numerator + "/" + this.denominator;
+                      }
+                     }
+    class Student
+                   {
+                   public final int studentID;    // Student's identification number
+                public int grade;      // Student's grade
+            public Student(int studentID, int grade)
+         {
+   this.studentID = studentID;
+                     this.grade = grade;
+             }
+             @Override
+             public boolean equals(Object obj)
+                {
+                         if (obj instanceof Student)
+{
+              Student otherStudent = (Student) obj;
+                        return this.studentID == otherStudent.studentID;
+                 }
+else return false;
+                         }
+                        @Override
+   public int hashCode()
+   {
+ return this.studentID;
+      }
+      }
+       class GroupAttribute
+{
+     public final long sumGrades;  // Sum of grades of students in the group
+ // Add more attributes here
+                     public final long sumSq;
+                     public final long num;
+                   public final int minGrade;
+         public final int maxGrade;
+          /**
+        * Constructor when the group only has 1 student.
+ */
+    public GroupAttribute(Student student)
+                       {
+                   sumGrades = student.grade;
+      sumSq = (long) student.grade * (long) student.grade;
+ num = 1;
+         minGrade = student.grade;
+  maxGrade = student.grade;
+        // Add more attributes here
+   }
+              /**
+                     * Constructor for generating attribute of two groups of students combined,
+ * with all the attributes updated
+ */
+      public GroupAttribute(GroupAttribute left, GroupAttribute right)
+         {
+                      this.sumGrades = left.sumGrades + right.sumGrades;
+              this.sumSq = left.sumSq + right.sumSq;
+      this.num = left.num + right.num;
+          this.minGrade = Math.min(left.minGrade, right.minGrade);
+    this.maxGrade = Math.max(left.maxGrade, right.maxGrade);
+        // Add more attributes here
+              }
+               // Computes the minimum grade of this group of students
+                       private int getMinimum()
+       {
+        // Write code here
+   return (int) minGrade;
+                }
+            // Computes the maximum grade of this group of students
+                private int getMaximum()
+                    {
+            // Write code here
+             return (int) maxGrade;  //i changed the declaration above lol oh okay.
+          }
+                       // Computes the average grade of this group of students
+          private Fraction getAverage()
+                   {
+                         // Write code here
+                return new Fraction(sumGrades, num); // Make use of the Fraction class
+                       }
+                    // Computes the sample standard deviation of this group of students
+           private double getSampleStandardDeviation()
+                         {
+                      // Write code here
+     double avg = (double) sumGrades / (double) num;
+             return Math.sqrt((double)((double)sumSq - 2.0*avg*(double)sumGrades + avg*avg*(double)num)/(double)(num)); //can this be 0?
+          }
+        @Override
+        public String toString()
+           {
+            return String.format("%s %.1f %d %d", getAverage(), getSampleStandardDeviation(),
+           getMinimum(), getMaximum());
+       }
+                }
+                         class Group
+     {
+       private ArrayList<Student> students;
+                    private GroupAttribute attribute;
+              // Constructor of an empty group
+                  public Group()
+                     {
+              students = new ArrayList<Student>();
+           attribute = null;
+               }
+            /**
+ * Add new student to the group
+      */
+           public void addStudent(Student student)
+  {
+    this.students.add(student);
+            this.updateAttributes();
+                    }
+        /**
+                    * Method to update a single value in the array.
+             * Pre-condition: index from l to r
+       */
+                       public void updateGrades(Student student)
+                         {
+            boolean found = false;
+                        for (int i = 0; i < students.size(); ++i)
+               {
+     if (students.get(i).equals(student))
+               {
+              students.set(i, student);
+                   found = true;
+  break;
+  }
+                      }
+               if (!found)
+           {
+                    throw new IllegalArgumentException("Unable to update student as student is not in this group!");
+   }
+              this.updateAttributes();
+  }
+                /**
+                    * Getter function for the attributes of this group
+ */
+                         public GroupAttribute getGroupAttribute()
+               {
+                    return attribute;
+     }
+ /**
+   * Recalculate the attributes of this group
+            */
+                         private void updateAttributes()
+        {
+                if (students.size() == 0)
+         {
+               attribute = null;
+     return;
+                       }
+                attribute = new GroupAttribute(students.get(0));
+                  for (int i = 1; i < students.size(); ++i)
+                      {
+                  attribute = new GroupAttribute(new GroupAttribute(students.get(i)), attribute);
+                       }
+            }
+                    }
+        class MagicArray
+                  {
+                    private Group[] groups;
+          private HashMap<Student, Group> studentGroups;
+                       private Student[] students;
+                   private int groupSize;
+                      /**
+               * Constructor for MagicArray
+                     */
+   public MagicArray(Student[] students)
+              {
+          this.students = students;
+   studentGroups = new HashMap<Student, Group>();
+        this.groupSize = (int) Math.ceil(Math.sqrt(students.length));
+                  groups = new Group[(students.length + groupSize -1) / groupSize];
+                     for (int i = 0; i < groups.length; i++)
+ {
+              groups[i] = new Group();
+  }
+                   for (int i = 0; i < students.length; i++)
+ {
+                        int groupNum = i / groupSize;
+groups[groupNum].addStudent(students[i]);
+               studentGroups.put(students[i], groups[groupNum]);
+                    }
+ }
+                    /**
+            * Method to update grade of a student in the MagicArray
+  * Pre-condition: student must exist in the MagicArray
+                  */
+        public void updateGrades(Student student, int newGrade)
+                        {
+                        if(!studentGroups.containsKey(student))
+           {
+     throw new IllegalArgumentException("Student does not exist in MagicArray");
+    }
+student.grade = newGrade;
+studentGroups.get(student).updateGrades(student);
+         }
+                   /**
+   * Compute the group attributes for a range of students
+  * Pre-condition: 0 <= startRange <= endRange <= students.length - 1
+                    */
+public GroupAttribute getRangeAttribute(int startRange, int endRange)
+                        {
+                    if (startRange > endRange)
+   {
+                     throw new IllegalArgumentException("startRange must not be larger than endRange");
+                     }
+                       else if (startRange < 0)
+          {
+      throw new IllegalArgumentException("startRange must be non-negative");
+            }
+                  else if (endRange >= students.length)
+                {
+               throw new IllegalArgumentException("endRange must not exceed the number of students");
+                         }
+    GroupAttribute result = null;
+        for (int i = startRange; i <= endRange;)
+              {
+   GroupAttribute currAttribute;
+ if (i % groupSize == 0 && (i + groupSize - 1) <= endRange)
+              {
+                      //Group is included
+    currAttribute = groups[i/groupSize].getGroupAttribute();
+          i += groupSize;
+             }
+     else
+                 {
+             currAttribute = new GroupAttribute(students[i]);
+        ++i;
+             }
+                  if (result == null) result = currAttribute;
+      else result = new GroupAttribute(result, currAttribute);
+     }
+                        return result;
+                  }
+          }
+                  class Gradebook
+           {
+              // Add methods and attributes here if required
+                    public static void main(String[] args)
+     {
+                 Scanner inputScanner = new Scanner(System.in);
+                     int N = inputScanner.nextInt();
+        // Input grades of all N students
+      Student[] students = new Student[N];
+            for (int studentID = 0; studentID < N; studentID++)
+                 {
+ students[studentID] = new Student(studentID, inputScanner.nextInt());
+                         }
+                    // Initialize MagicArray from N students
+         MagicArray magicArray = new MagicArray(students);
+            int Q = inputScanner.nextInt();
+        for(int i = 0; i < Q; i++)
+                {
+           String type = inputScanner.next();
+              if(type.equals("QUERY"))
+    {
+                        System.out.println(magicArray.getRangeAttribute(inputScanner.nextInt(), inputScanner.nextInt()));
+                    }
+         else
+     {
+               magicArray.updateGrades(students[inputScanner.nextInt()], inputScanner.nextInt());
+              }
+        }
+   // Write code here to process updates and queries
+        }
+      }

@@ -1,0 +1,8 @@
+public class GgEqualsG
+ {
+//the most important method
+    public void run()
+       {
+ print("who    needs gg=G");
+   }
+}

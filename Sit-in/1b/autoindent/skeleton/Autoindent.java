@@ -1,0 +1,18 @@
+/**
+ * Name         :
+ * Matric. No   :
+ * PLab Acct.   :
+ */
+
+import java.util.*;
+
+public class Autoindent {
+	private void run() {
+		//implement your "main" method here
+	}
+
+	public static void main(String[] args) {
+		Autoindent newAutoindent = new Autoindent();
+		newAutoindent.run();
+	}
+}

@@ -1,0 +1,7 @@
+public class Autoindent
+{
+  public void run()
+  {
+    return;
+  }
+}
