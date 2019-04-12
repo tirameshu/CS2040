@@ -5,11 +5,10 @@ import java.util.*;
 public class BinaryHeap {
   private ArrayList<Integer> A;
   private int BinaryHeapSize;
-  private HashMap<Integer, ArrayList<Integer>> valToIndex;
+  private HashMap<Integer, HashSet<Integer>> valToIndex = new HashMap<>();
 
   BinaryHeap() {
     A = new ArrayList<Integer>();
-	valToIndex = new HashMap<>();
     A.add(0); // dummy
     BinaryHeapSize = 0;
   }
@@ -24,16 +23,30 @@ public class BinaryHeap {
   
   int right(int i) { return (i<<1) + 1; } // shortcut for 2*i + 1
   
+  void updateMap(int val, int toRemove, int newIndex) {
+	  HashSet<Integer> list = valToIndex.getOrDefault(val, new HashSet<>()); // added
+	  list.remove(toRemove); // added
+	  list.add(newIndex); // added
+	  valToIndex.put(val, list); // added
+  }
+
+  void updateMap(int val, int index) {
+	  HashSet<Integer> list = valToIndex.getOrDefault(val, new HashSet<Integer>());
+	  list.add(index);
+	  valToIndex.put(val, list);
+  }
+ 
   void shiftUp(int i) {
     while (i > 1 && A.get(parent(i)) < A.get(i)) {
       int temp = A.get(i);
 	  int parent = A.get(parent(i));
+
       A.set(i, parent);
-	  valToIndex.get(parent).remove(Integer.valueOf(parent(i))); // added
-	  valToIndex.get(parent).add(i); // added
-      A.set(parent(i), temp);
-	  valToIndex.get(temp).remove((Integer) i); // added
-	  valToIndex.get(temp).add(parent(i)); // added
+	  updateMap(parent, parent(i), i);
+
+	  A.set(parent(i), temp);
+	  updateMap(temp, i, parent(i));
+
       i = parent(i);
     }
   }
@@ -42,14 +55,10 @@ public class BinaryHeap {
     BinaryHeapSize++;
     if (BinaryHeapSize >= A.size()) {
       A.add(key);
-	  ArrayList<Integer> list = valToIndex.getOrDefault(key, new ArrayList<Integer>());
-	  list.add(A.size()-1);
-	  valToIndex.put(key, list);
+	  updateMap(key, A.size()-1);
 	} else {
       A.set(BinaryHeapSize, key);
-	  ArrayList<Integer> list = valToIndex.getOrDefault(key, new ArrayList<Integer>());
-	  list.add(BinaryHeapSize);
-	  valToIndex.put(key, list);
+	  updateMap(key, BinaryHeapSize);
 	}
     shiftUp(BinaryHeapSize);
   }
@@ -73,13 +82,14 @@ public class BinaryHeap {
       if (max_id != i) {
         int temp = A.get(i);
 		int m = A.get(max_id);
+
         A.set(i, m);
-		valToIndex.get(m).remove((Integer) max_id); // added
-		valToIndex.get(m).add(i); // added
+		updateMap(m, max_id, i);
+
         A.set(max_id, temp);
-		valToIndex.get(temp).remove((Integer) i); // added
-		valToIndex.get(temp).add(max_id); // added
-        i = max_id;
+		updateMap(temp, i, max_id);
+
+		i = max_id;
       }
       else
         break;
@@ -91,7 +101,8 @@ public class BinaryHeap {
   	int maxV = A.get(1);    
       
     A.set(1, A.get(BinaryHeapSize));
-	valToIndex.get(maxV).remove((Integer) 1); // added
+	valToIndex.get(maxV).remove(1); // added
+	updateMap(A.get(BinaryHeapSize), BinaryHeapSize, 1); // added
     BinaryHeapSize--; // virtual decrease
     shiftDown(1);
     
@@ -100,14 +111,14 @@ public class BinaryHeap {
   
   void UpdateKey(int i, int j) {
     // implement this function
-	ArrayList<Integer> indices = valToIndex.get(i);
-	int index = indices.get(indices.size()-1); // assummed non-empty
+	Iterator<Integer> it = valToIndex.get(i).iterator();
+	int index = it.next(); // assummed non-empty
 	// System.out.println("I replaced " + i + " at index " + index + " to " + j);
 	A.set(index, j); // updated
-	indices.remove((Integer) indices.size()-1); // O(1)
-	ArrayList<Integer> list = valToIndex.getOrDefault(j, new ArrayList<Integer>());
-	list.add(index);
-	valToIndex.put(j, list);
+	
+	valToIndex.get(i).remove(index);
+	updateMap(j, index);
+
 	shiftDown(index);
 	shiftUp(index);
   } 
@@ -122,13 +133,10 @@ public class BinaryHeap {
   void CreateHeap(int[] arr) { // the O(N) version, array arr is 0-based
     BinaryHeapSize = arr.length;
     A = new ArrayList<Integer>();
-	valToIndex = new HashMap<>(); // added
     A.add(0); // dummy, this BinaryHeap is 1-based
     for (int i = 1; i <= BinaryHeapSize; i++) {// copy the content
       A.add(arr[i-1]);
-	  ArrayList<Integer> list = valToIndex.getOrDefault(arr[i-1], new ArrayList<Integer>());
-	  list.add(i);
-	  valToIndex.put(arr[i-1], list); // added
+	  updateMap(arr[i-1], i);
 	}
     for (int i = parent(BinaryHeapSize); i >= 1; i--)
       shiftDown(i);
@@ -140,8 +148,7 @@ public class BinaryHeap {
     for (int i = 1; i <= N; i++) {
 	  int max = ExtractMax();
       A.set(N-i+1, max);
-	  valToIndex.get(max).remove((Integer) 1);
-	  valToIndex.get(max).add(N-i+1);
+	  updateMap(max, N-i+1);
 	}
     return A; // ignore the first index 0
   }
