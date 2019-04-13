@@ -15,6 +15,7 @@ class BSTVertex {
 // There are other ways to implement BST concepts...
 public class BST {
   public BSTVertex root;
+  public boolean rotated;
 
   public BST() { root = null; }
 
@@ -115,6 +116,25 @@ public class BST {
   // public method called to insert a new key with value v into BST
   public void insert(int v) { root = insert(root, v); }
 
+  public int balanceFactor(BSTVertex T) {
+	int heightL, heightR;
+	if (T.left == null) {
+		heightL = -1;
+	} else {
+		heightL = T.left.height + 1;
+	}
+
+	if (T.right == null) {
+		heightR = -1;
+	} else {
+		heightR = T.right.height + 1;
+	}
+
+	T.height = Math.max(heightL, heightR) + 1;
+
+	return heightL - heightR;
+  }
+
   // helper recursive method to perform insertion of new vertex into BST
   private BSTVertex insert(BSTVertex T, int v) {
     if (T == null) return new BSTVertex(v);          // insertion point is found
@@ -128,9 +148,66 @@ public class BST {
       T.left.parent = T;
     }
 
+	if (rotated) {
+		if (T == this.root) rotated = false;
+		return T;
+	}
+
+	int bf = balanceFactor(T);
+	
+	switch (bf) {
+		case 2:
+			rotated = true;
+			int bfL = balanceFactor(T.left);
+			if (bfL >= 0 && bfL <= 1) {
+				return rightRotate(T);
+			} else if (bfL == -1) {
+				T.left = leftRotate(T.left);
+				return rightRotate(T);
+			} else {
+				// System.out.println("something is wrong! bfL = " + bfL);
+				break;
+			}
+
+		case -2:
+			rotated = true;
+			int bfR = balanceFactor(T.right);
+			if (bfR <= 0 && bfR >= -1) {
+				return leftRotate(T);
+			} else if (bfR == 1) {
+				T.right = rightRotate(T.right);
+				return leftRotate(T);
+			} else {
+				// System.out.println("something is wrong! bfR = " + bfR);
+				break;
+			}
+	}
+			
     return T;                                          // return the updated BST
   }  
 
+  public BSTVertex rightRotate(BSTVertex T) {
+	  BSTVertex leftOfT = T.left;
+	  BSTVertex parentOfT = T.parent;
+
+	  leftOfT.parent = parentOfT;
+	  T.left = leftOfT.right;
+	  if (leftOfT.right != null) leftOfT.right.parent = T;
+	  T.parent = leftOfT;
+	  leftOfT.right = T;
+	  return leftOfT;
+  }
+
+  public BSTVertex leftRotate(BSTVertex T) {
+	  BSTVertex rightOfT = T.right;
+	  rightOfT.parent = T.parent;
+	  T.parent = rightOfT;
+	  T.right = rightOfT.left;
+	  if (rightOfT.left != null) rightOfT.left.parent = T;
+	  rightOfT.left = T;
+	  return rightOfT;
+  }
+	  
   // public method to delete a vertex containing key with value v from BST
   public void delete(int v) { root = delete(root, v); }
 
