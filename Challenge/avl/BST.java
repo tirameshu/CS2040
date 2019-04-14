@@ -121,13 +121,13 @@ public class BST {
 	if (T.left == null) {
 		heightL = -1;
 	} else {
-		heightL = T.left.height + 1;
+		heightL = T.left.height; // changed
 	}
 
 	if (T.right == null) {
 		heightR = -1;
 	} else {
-		heightR = T.right.height + 1;
+		heightR = T.right.height; // changed
 	}
 
 	T.height = Math.max(heightL, heightR) + 1;
