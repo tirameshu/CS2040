@@ -19,25 +19,37 @@ public class PandaChess {
 	ArrayList<Integer> topo = new ArrayList<>();
 
 	boolean[] visited; // assuming 1-base, n = #vertices
-	// start with parent = -1
+	int[] indeg;
+	Queue<Integer> queue = new LinkedList<>();
 
-	public boolean isCyclic(int v, boolean[] visited, ArrayList<Integer> elders) {
-		visited[v] = true;
-		HashSet<Integer> neighbours = graph.getOrDefault(v, new HashSet<Integer>());
-		Iterator<Integer> it = neighbours.iterator();
-		boolean flag = false;
-		while (it.hasNext()) {
-			int neighbour = it.next();
-			System.out.println("v " + v + " has parents: " + elders + " and has neighbour: " + neighbour);
-			if (!visited[neighbour]) {
-				elders.add(v);
-				if (!flag) flag = isCyclic(neighbour, visited, elders);
-			} else if (elders.contains(neighbour)) { // changed
-				return true;
+	private boolean isCyclic() {
+		// queue the vertices with indeg 0
+		// remove them from graph; ie set their indeg to -1 and indeg of their neighbours--
+		// if no one else has indeg 0, there is a cycle
+		// else queue those with indeg 0
+		//System.out.println(Arrays.toString(indeg));
+		while (!queue.isEmpty()) {
+			int u = queue.poll();
+			HashSet<Integer> losers = graph.getOrDefault(u, new HashSet<>());
+			Iterator<Integer> it = losers.iterator();
+			while (it.hasNext()) {
+				int neighbour = it.next();
+				indeg[neighbour]--;
+				if (indeg[neighbour] == 0) {
+					queue.offer(neighbour);
+				}
 			}
+			indeg[u] = -1;
 		}
-
-		return flag;
+		int[] empty = new int[n+1];
+		Arrays.fill(empty, -1);
+		//System.out.println(Arrays.toString(indeg));
+		if (!Arrays.equals(indeg, empty)) {
+			// means not all removed from graph
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	private void toposort(int v) { // dfs
@@ -62,28 +74,73 @@ public class PandaChess {
 		int highest = 0; // highest number of wins yet
 		int v = 0; // has to be the one with most number of wins
 		visited = new boolean[n+1];
+		indeg = new int[n+1];
+		Arrays.fill(indeg, -1);
+		int count = 0;
 
 		for (int i = 0; i < m; i++) {
 			int winner = sc.nextInt();
 			int loser = sc.nextInt();
+			if (indeg[winner] == -1) indeg[winner] = 0;
+			if (indeg[loser] == -1) indeg[loser] = 0;
 			HashSet<Integer> losers = graph.getOrDefault(winner, new HashSet<>());
+			int originalSize = losers.size();
 			losers.add(loser);
-			if (losers.size() > highest) {
-				v = winner;
-			}
+			indeg[loser] += (losers.size() - originalSize);
+			if (losers.size() > highest) v = winner;
 			graph.put(winner, losers);
 		}
 		
-		if (v != 0 && isCyclic(v, visited, new ArrayList<>())) {
-			System.out.println("No possible ranking.");
-		} else {
-			boolean[] allTrue = new boolean[n+1];
-			Arrays.fill(allTrue, true);
-			allTrue[0] = false;
-			if (v == 0 || !Arrays.equals(visited, allTrue)) {
-				// either m == 0 or graph not connected
-				System.out.println("V: " + v);
-				System.out.println(Arrays.toString(visited));
+		if (v != 0) {
+			int[] indegree = new int[n+1];
+			for (int i = 1; i < n + 1; i++) {
+				indegree[i] = 0;
+			}
+
+			// setting indegree for all vertices
+			for (int i = 1; i < n + 1; i++) {
+				HashSet<Integer> neighbours = graph.getOrDefault(i, new HashSet<>());
+				for (Iterator<Integer> it = neighbours.iterator(); it.hasNext();) {
+					int neighbour = it.next();
+					indegree[neighbour]++;
+				}
+			}
+
+			// adding all vertices with indegree 0 inside q
+			Queue<Integer> q = new LinkedList<>();
+			for (int i = 1; i < n + 1; i++) {
+				if (indegree[i] == 0) {
+					q.add(i);
+				}
+			}
+			
+			boolean noUniqueTopo = false;
+
+			//run bfs
+			while (!q.isEmpty()) {
+				int vertex = q.poll();
+				if (!q.isEmpty()) noUniqueTopo = true;
+				HashSet<Integer> neighbours = graph.getOrDefault(vertex, new HashSet<>());
+				for (Iterator<Integer> it = neighbours.iterator(); it.hasNext(); ) {
+					int neighbour = it.next();
+					if (indegree[neighbour] > 0) indegree[neighbour]--;
+					if (indegree[neighbour] == 0) q.add(neighbour);
+				}
+			}
+
+			//System.out.println(Arrays.toString(indeg));
+
+			for (int i = 1; i <= n; i++) {
+				if (indeg[i] == 0) {
+					count++;
+					queue.offer(i);
+				}
+			}
+			
+			//System.out.println("count: " + count);
+			if (count == 0 || isCyclic()) {
+				System.out.println("No possible ranking.");
+			} else if (count > 1 || noUniqueTopo) { // not connected 
 				System.out.println("Ranking is not unique.");
 			} else {
 				visited = new boolean[n+1];
@@ -95,6 +152,8 @@ public class PandaChess {
 				Collections.reverse(topo);
 				topo.forEach(System.out::println);
 			}
+		} else {
+			System.out.println("Ranking is not unique.");
 		}
 	}
 
