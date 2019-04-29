@@ -150,11 +150,13 @@ public class BST {
             T.left.parent = T;
         }
 
+		/*
         if (rotated) {
             T.size++;
             if (T == this.root) rotated = false;
             return T;
         }
+		*/
 
         int bf = balanceFactor(T);
 
@@ -191,9 +193,7 @@ public class BST {
         }
 
         // does not require rotation
-        T.size++;
-
-        //resize(T);
+        resize(T);
         //System.out.println("\nKey: " + T.key + " size: " + T.size + "\n");
 
         return T;                                          // return the updated BST
@@ -210,21 +210,35 @@ public class BST {
         leftOfT.right = T;
 
         // after rotation
-        // updating size of T
-        if (T.right != null) {
-            if (T.left != null) T.size = T.left.size + T.right.size + 1;
-            else T.size = T.right.size + 1;
-        } else {
-            if (T.left != null) T.size = T.left.size + 1;
-            else T.size = 1;
-        }
-
-        // updating size of T's new parent
-        if (T.parent.left != null) T.parent.size = T.parent.left.size + T.size + 1;
-        else T.parent.size = T.size + 1;
+		// updating size of T and parent
+		resize(T);
+		if (leftOfT.left != null) resize(leftOfT.left);
+		resize(leftOfT);
 
         return leftOfT;
     }
+
+	private void resize(BSTVertex T) {
+        if (T.right != null) {
+            if (T.left != null) {
+				T.size = T.left.size + T.right.size + 1;
+				T.height = Math.max(T.left.height, T.right.height) + 1;
+			}
+            else {
+				T.size = T.right.size + 1;
+				T.height = T.right.height + 1;
+			}
+        } else {
+            if (T.left != null) {
+				T.size = T.left.size + 1;
+				T.height = T.left.height + 1;
+			}
+            else {
+				T.size = 1;
+				T.height = 0;
+			}
+        }
+	}
 
     public BSTVertex leftRotate(BSTVertex T) {
         BSTVertex rightOfT = T.right;
@@ -236,18 +250,10 @@ public class BST {
         rightOfT.left = T;
 
         // after rotation
-        // updating size of T
-        if (T.right != null) {
-            if (T.left != null) T.size = T.left.size + T.right.size + 1;
-            else T.size = T.right.size + 1;
-        } else {
-            if (T.left != null) T.size = T.left.size + 1;
-            else T.size = 1;
-        }
-
-        // updating size of T's new parent
-        if (T.parent.right != null) T.parent.size = T.size + T.parent.right.size + 1;
-        else T.parent.size = T.size + 1;
+        // updating size of T and parent
+		resize(T);
+		if (rightOfT.right != null) resize(rightOfT.right);
+		resize(rightOfT);
 
         return rightOfT;
     }
@@ -265,24 +271,8 @@ public class BST {
 			T.rank = TLeftSize + 1;
 			return T.rank;
 		} else if (T.key > v) {
-			/*
-			if (T.left.rank == -1) {
-				T.left.rank = rank(T.left, T.left);
-			}
-			*/
-			if (T.left.rank != -1) {
-				T.rank = T.left.rank + 1;
-			}
 			return rank(T.left, v);
 		} else {
-			/*
-			if (T.right.rank == -1) {
-				T.right.rank = rank(T.right, T.right);
-			}
-			*/
-			if (T.right.rank != -1) {
-				T.rank = T.right.rank - 1;
-			}
 			return TLeftSize + 1 + rank(T.right, v);
 		}
     }
